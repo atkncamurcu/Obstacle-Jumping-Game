@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="React ve TypeScript ile geliştirilmiş 2D platform oyunu" />
+    <title>Engel Atlama Oyunu</title>
+    <style>
+      /* Space tuşu ile scroll'u engellemek için */
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+      #root {
+        height: 100%;
+        overflow: auto;
+      }
+    </style>
+    <script>
+      // Space tuşu ile scroll'u engelleme - global olarak
+      window.addEventListener('keydown', function(e) {
+        if(e.code === 'Space' && e.target === document.body) {
+          e.preventDefault();
+          return false;
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
