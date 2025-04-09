@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 
-// Space tuşu ile scroll'u engelleme - global event listener
+// Prevent scrolling with Space key - global event listener
 document.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {
     e.preventDefault();

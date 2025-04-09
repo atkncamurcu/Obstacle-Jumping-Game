@@ -5,7 +5,7 @@ import { useGameStore } from './store/gameStore';
 const App: React.FC = () => {
   const { highScore } = useGameStore();
   
-  // Sayfa yüklendiğinde localStorage'dan yüksek skoru yükle
+  // Load high score from localStorage when page loads
   useEffect(() => {
     const savedHighScore = localStorage.getItem('highScore');
     if (savedHighScore) {
@@ -28,8 +28,8 @@ const App: React.FC = () => {
       boxSizing: 'border-box'
     }}>
       <header style={{ marginBottom: '10px' }}>
-        <h1 style={{ color: '#333', margin: '0 0 5px', fontSize: '28px' }}>Engel Atlama Oyunu</h1>
-        <p style={{ color: '#666', margin: '0', fontSize: '14px' }}>Engellerin üzerinden atlayarak ilerlemeye ve puan toplamaya çalışın!</p>
+        <h1 style={{ color: '#333', margin: '0 0 5px', fontSize: '28px' }}>Obstacle Jumping Game</h1>
+        <p style={{ color: '#666', margin: '0', fontSize: '14px' }}>Jump over obstacles to progress and collect points!</p>
       </header>
       
       <main>

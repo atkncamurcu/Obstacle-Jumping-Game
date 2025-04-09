@@ -4,16 +4,16 @@ import { useGameStore } from '../store/gameStore';
 const ControlsPanel: React.FC = () => {
   const { startGame, pauseGame, resumeGame, resetGame, isPlaying, isPaused, isGameOver, activePowerup } = useGameStore();
   
-  // Mobil dokunmatik kontroller için fonksiyonlar
+  // Functions for mobile touch controls
   const handleJump = () => {
     const { jump } = useGameStore.getState();
     jump();
   };
   
-  // Klavye olaylarını dinle
+  // Listen for keyboard events
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // "P" tuşu ile oyunu duraklat/devam ettir
+      // "P" key to pause/resume the game
       if (e.code === 'KeyP') {
         if (isPlaying && !isGameOver) {
           if (isPaused) {
@@ -24,7 +24,7 @@ const ControlsPanel: React.FC = () => {
         }
       }
       
-      // "R" tuşu ile oyunu yeniden başlat
+      // "R" key to restart the game
       if (e.code === 'KeyR') {
         if (isGameOver || !isPlaying) {
           resetGame();
@@ -42,7 +42,7 @@ const ControlsPanel: React.FC = () => {
   
   return (
     <>
-      {/* Bilgisayar Kontrolleri Açıklaması */}
+      {/* Computer Controls Description */}
       <div
         className="keyboard-controls"
         style={{
@@ -54,7 +54,7 @@ const ControlsPanel: React.FC = () => {
           textAlign: 'center'
         }}
       >
-        <h3 style={{ margin: '0 0 5px', color: '#333', fontSize: '14px' }}>Kontroller</h3>
+        <h3 style={{ margin: '0 0 5px', color: '#333', fontSize: '14px' }}>Controls</h3>
         <div
           style={{
             display: 'flex',
@@ -75,7 +75,7 @@ const ControlsPanel: React.FC = () => {
             >
               SPACE
             </span>
-            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Zıpla</span>
+            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Jump</span>
           </div>
           
           <div>
@@ -91,7 +91,7 @@ const ControlsPanel: React.FC = () => {
             >
               SPACE (x2)
             </span>
-            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Çift Zıplama</span>
+            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Double Jump</span>
           </div>
           
           <div>
@@ -107,7 +107,7 @@ const ControlsPanel: React.FC = () => {
             >
               P
             </span>
-            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Duraklat/Devam Et</span>
+            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Pause/Resume</span>
           </div>
           
           <div>
@@ -123,10 +123,10 @@ const ControlsPanel: React.FC = () => {
             >
               R
             </span>
-            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Yeniden Başlat</span>
+            <span style={{ marginLeft: '5px', fontSize: '12px' }}>Restart</span>
           </div>
           
-          {/* Silah güçlendirmesi aktifken ateş etme bilgisi */}
+          {/* Firing information when gun powerup is active */}
           {activePowerup === 'gun' && (
             <div>
               <span
@@ -142,7 +142,7 @@ const ControlsPanel: React.FC = () => {
               >
                 X / F
               </span>
-              <span style={{ marginLeft: '5px', fontSize: '12px' }}>Ateş Et</span>
+              <span style={{ marginLeft: '5px', fontSize: '12px' }}>Fire</span>
             </div>
           )}
         </div>

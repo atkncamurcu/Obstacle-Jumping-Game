@@ -19,34 +19,34 @@ const Game = () => {
     level
   } = useGameStore();
   
-  // Zustand set fonksiyonuna erişim için store'u doğrudan kullan
+  // Use store directly to access Zustand set function
   const setGameState = useGameStore.setState;
   
-  // Oyun döngüsü için requestAnimationFrame referansı
+  // Reference for requestAnimationFrame game loop
   const gameLoopRef = useRef<number | null>(null);
   
-  // Obstacle oluşturma zamanlayıcısı
+  // Obstacle creation timer
   const obstacleTimerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Oyun döngüsü
+  // Game loop
   useEffect(() => {
     if (!isPlaying) return;
     
-    // Oyun döngüsü fonksiyonu
+    // Game loop function
     const gameLoop = () => {
       updateObstacles();
       gameLoopRef.current = requestAnimationFrame(gameLoop);
     };
     
-    // Döngüyü başlat
+    // Start the loop
     gameLoopRef.current = requestAnimationFrame(gameLoop);
     
-    // Engel oluşturma zamanlayıcısı
+    // Obstacle creation timer
     obstacleTimerRef.current = setInterval(() => {
       addObstacle();
     }, obstacleFrequency);
     
-    // Temizlik fonksiyonu
+    // Cleanup function
     return () => {
       if (gameLoopRef.current) {
         cancelAnimationFrame(gameLoopRef.current);
@@ -58,17 +58,17 @@ const Game = () => {
     };
   }, [isPlaying, obstacleFrequency, level, updateObstacles, addObstacle]);
   
-  // Klavye olaylarını dinle
+  // Listen for keyboard events
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Her durumda Space tuşunun scroll etmesini engelle
+      // Prevent scrolling with Space key in all cases
       if (e.code === 'Space') {
         e.preventDefault();
       }
 
       if (!isPlaying) {
-        // Oyun başlamadığında sadece "R" tuşu ile başlamayı sağla
-        // Space tuşunu sadece oyun içinde zıplama için kullan
+        // When game hasn't started, only allow "R" key to start
+        // Use Space key only for jumping during gameplay
         if (e.code === 'KeyR') {
           resetGame();
           startGame();
@@ -76,23 +76,23 @@ const Game = () => {
         return;
       }
       
-      // Oyun aktifken kontroller
+      // Controls while game is active
       const { jump, shootBullet } = useGameStore.getState();
       
       if (e.code === 'Space' || e.code === 'ArrowUp') {
-        e.preventDefault(); // Tarayıcının varsayılan davranışını engelle (scroll)
+        e.preventDefault(); // Prevent default browser behavior (scrolling)
         jump();
       }
       
-      // "X" tuşu ile silah güçlendirmesi aktifken ateş etme
+      // Fire with "X" key when gun powerup is active
       if ((e.code === 'KeyX' || e.code === 'KeyF') && useGameStore.getState().activePowerup === 'gun') {
         e.preventDefault();
         shootBullet();
       }
 
-      // "R" tuşu ile yeniden başlatma
+      // Restart with "R" key
       if (e.code === 'KeyR') {
-        // Oyun bitmişse veya devam ediyorken yeniden başlatabilir
+        // Can restart whether game is over or still in progress
         resetGame();
         startGame();
       }
@@ -105,10 +105,10 @@ const Game = () => {
     };
   }, [isPlaying, isGameOver, startGame, resetGame]);
   
-  // Game Over durumu için useEffect
-  // NOT: Otomatik ana sayfaya dönüş kaldırıldı
+  // useEffect for Game Over state
+  // NOTE: Automatic return to main page was removed
   useEffect(() => {
-    // Sadece referans için boş useEffect bırakıldı
+    // Empty useEffect left for reference only
   }, [isGameOver]);
   
   return (

@@ -4,13 +4,13 @@ import { getSkinById } from '../utils/skins';
 const Player = () => {
   const { playerPosition, isJumping, activePowerup, hasDoubleJumped, currentSkinId } = useGameStore();
   
-  // Seçilen skin'i al
+  // Get the selected skin
   const selectedSkin = getSkinById(currentSkinId);
   
-  // Oyuncu boyutları
+  // Player dimensions
   const PLAYER_WIDTH = 50;
-  const PLAYER_HEIGHT = 60; // Yüksekliği biraz artır
-  const GROUND_HEIGHT = 50; // GameArea'daki ground yüksekliği
+  const PLAYER_HEIGHT = 60; // Increased height a bit
+  const GROUND_HEIGHT = 50; // Ground height in GameArea
   
   return (
     <div
@@ -21,28 +21,28 @@ const Player = () => {
         bottom: `${GROUND_HEIGHT + playerPosition.y}px`,
         width: `${PLAYER_WIDTH}px`,
         height: `${PLAYER_HEIGHT}px`,
-        backgroundColor: selectedSkin.mainColor, // Skin rengini uygula
-        borderRadius: selectedSkin.headShape || '50% 50% 0 0', // Kafa şeklini uygula
-        transition: isJumping ? 'none' : 'left 0.1s ease-out', // Sadece yatay hareket için smooth transition
+        backgroundColor: selectedSkin.mainColor, // Apply skin color
+        borderRadius: selectedSkin.headShape || '50% 50% 0 0', // Apply head shape
+        transition: isJumping ? 'none' : 'left 0.1s ease-out', // Smooth transition only for horizontal movement
         zIndex: 10,
-        // Görünmezlik güçlendirmesi için opasite
+        // Opacity for invisibility powerup
         opacity: activePowerup === 'invisibility' ? 0.5 : 1,
-        // Görünmezlik güçlendirmesi ve çift zıplama için parlama efekti
+        // Glow effect for invisibility powerup and double jump
         boxShadow: activePowerup === 'invisibility' 
           ? '0 0 20px 10px rgba(0, 191, 255, 0.7)' 
           : hasDoubleJumped
-          ? '0 0 15px 5px rgba(255, 215, 0, 0.8)' // Çift zıplama için altın parıltısı
+          ? '0 0 15px 5px rgba(255, 215, 0, 0.8)' // Gold glow for double jump
           : selectedSkin.special && selectedSkin.special.effect === 'glow'
-          ? `0 0 15px 5px ${selectedSkin.special.effectColor}` // Özel skin efekti
+          ? `0 0 15px 5px ${selectedSkin.special.effectColor}` // Special skin effect
           : '0 5px 15px rgba(0, 0, 0, 0.3)',
         animation: hasDoubleJumped 
           ? 'pulse 0.5s infinite' 
           : selectedSkin.special && selectedSkin.special.effect === 'sparkle' 
           ? 'pulse 1.5s infinite' 
-          : 'none' // Çift zıplama veya özel skin efekti için animasyon
+          : 'none' // Animation for double jump or special skin effect
       }}
     >
-      {/* Göz */}
+      {/* Eye */}
       <div 
         style={{
           position: 'absolute',
@@ -67,7 +67,7 @@ const Player = () => {
         />
       </div>
       
-      {/* Bacaklar */}
+      {/* Legs */}
       <div
         style={{
           position: 'absolute',
@@ -75,7 +75,7 @@ const Player = () => {
           left: '10px',
           width: '10px',
           height: '15px',
-          backgroundColor: selectedSkin.secondaryColor, // Bacaklar için ikincil renk
+          backgroundColor: selectedSkin.secondaryColor, // Secondary color for legs
           borderRadius: '0 0 5px 5px'
         }}
       />
@@ -87,7 +87,7 @@ const Player = () => {
           right: '10px',
           width: '10px',
           height: '15px',
-          backgroundColor: selectedSkin.secondaryColor, // Bacaklar için ikincil renk
+          backgroundColor: selectedSkin.secondaryColor, // Secondary color for legs
           borderRadius: '0 0 5px 5px'
         }}
       />

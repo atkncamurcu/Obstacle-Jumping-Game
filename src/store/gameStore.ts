@@ -21,79 +21,79 @@ export interface PlayerPosition {
 }
 
 interface GameState {
-  // Oyun durumu
+  // Game state
   isPlaying: boolean;
   isGameOver: boolean;
   isPaused: boolean;
   
-  // Oyuncu durumu
+  // Player state
   playerPosition: PlayerPosition;
   isJumping: boolean;
-  canDoubleJump: boolean; // Çift zıplama için flag
-  hasDoubleJumped: boolean; // Çift zıplama yaptı mı?
+  canDoubleJump: boolean; // Flag for double jump
+  hasDoubleJumped: boolean; // Has performed double jump?
   
-  // Karakter kişiselleştirme
+  // Character customization
   currentSkinId: string;
   unlockedSkins: string[];
-  totalScore: number; // Tüm oyunlarda kazanılan toplam puan
+  totalScore: number; // Total score earned across all games
   
-  // Güçlendirmeler
+  // Powerups
   activePowerup: 'invisibility' | 'slowTime' | 'gun' | 'shrinkObstacles' | 'doublePoints' | null;
   powerupTimer: number | null;
-  bulletPosition: PlayerPosition | null; // Silah güçlendirmesi için mermi pozisyonu
-  originalObstacleSpeed: number; // Zaman yavaşlatma için orijinal hızı sakla
-  pointsMultiplier: number; // Puan çarpanı
+  bulletPosition: PlayerPosition | null; // Bullet position for gun powerup
+  originalObstacleSpeed: number; // Store original speed for slow time
+  pointsMultiplier: number; // Points multiplier
   
-  // Oyun skorları
+  // Game scores
   score: number;
   highScore: number;
   
-  // Güçlendirmeler ve yetenekler için fonksiyonlar
+  // Functions for powerups and abilities
   activatePowerup: (powerupType: 'invisibility' | 'slowTime' | 'gun' | 'shrinkObstacles') => void;
   shootBullet: () => void;
   
-  // Engeller
+  // Obstacles
   obstacles: Obstacle[];
   obstacleSpeed: number;
   obstacleFrequency: number;
   
-  // Zorluk seviyesi
+  // Difficulty level
   level: number;
   
-  // Metodlar
+  // Methods
   startGame: () => void;
   endGame: () => void;
   pauseGame: () => void;
   resumeGame: () => void;
   resetGame: () => void;
   
-  // Oyuncu kontrolü
+  // Player control
   jump: () => void;
   updatePlayerPosition: (position: Partial<PlayerPosition>) => void;
   
-  // Karakter yetenekleri
+  // Character abilities
   activateAbility: (abilityType: 'triple_jump' | 'shield' | 'magnet' | 'time_warp' | 'teleport' | 'size_change' | 'gravity_shift' | 'dash') => void;
   useAbility: () => void;
   
-  // Engel yönetimi
+  // Obstacle management
   addObstacle: () => void;
   removeObstacle: (id: number) => void;
   updateObstacles: () => void;
   
-  // Skor yönetimi
+  // Score management
   increaseScore: () => void;
   updateHighScore: () => void;
   
-  // Seviye zorluğu
+  // Difficulty level
   increaseLevel: () => void;
   
-  // Karakter kişiselleştirme
+  // Character customization
   setSkin: (skinId: string) => boolean;
   unlockSkin: (skinId: string) => boolean;
   checkAndUnlockSkins: () => void;
 }
 
-// Oyun alanı boyutları
+// Game area dimensions
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 350;
 const PLAYER_WIDTH = 50;
@@ -102,7 +102,7 @@ const GROUND_HEIGHT = 50;
 const JUMP_HEIGHT = 180;
 const JUMP_DURATION = 500; // milisaniye
 
-// Oyuncunun sol tarafa yakın konumu
+// Player's position fixed near the left side
 const PLAYER_FIXED_X = 150; // Ekranın sol tarafına yakın konumlandırma
 
 // Initial state
@@ -111,12 +111,12 @@ const initialState = {
   isGameOver: false,
   isPaused: false,
   
-  playerPosition: { x: PLAYER_FIXED_X, y: 0 }, // Konumu sol tarafa yakın olarak ayarlandı
+  playerPosition: { x: PLAYER_FIXED_X, y: 0 }, // Position set near the left side
   isJumping: false,
   canDoubleJump: false,
   hasDoubleJumped: false,
   
-  // Karakter kişiselleştirme
+  // Character customization
   currentSkinId: DEFAULT_SKIN_ID,
   unlockedSkins: [DEFAULT_SKIN_ID],
   totalScore: 0,
@@ -143,7 +143,7 @@ export const useGameStore = create<GameState>(
       ...initialState,
       
       startGame: () => {
-        // Efsanevi karakter için özel bir başlangıç puanı kontrolü
+        // Legendary character special starting score check
         const { currentSkinId } = get();
         const startScore = currentSkinId === 'legendary' ? 100 : 0;
         
@@ -153,7 +153,7 @@ export const useGameStore = create<GameState>(
           isPaused: false,
           score: startScore,
           obstacles: [],
-          playerPosition: { x: PLAYER_FIXED_X, y: 0 }, // Başlangıç konumu sol tarafa yakın
+          playerPosition: { x: PLAYER_FIXED_X, y: 0 }, // Starting position near left side
           isJumping: false,
           canDoubleJump: false,
           hasDoubleJumped: false,
@@ -172,7 +172,7 @@ export const useGameStore = create<GameState>(
         const { score } = get();
         set({ isPlaying: false, isGameOver: true });
         get().updateHighScore();
-        // Oyun sona erdiğinde ana sayfaya otomatik dönüş kaldırıldı
+        // Game automatically returns to main screen when ended (removed)
       },
       
       pauseGame: () => set({ isPaused: true }),
@@ -198,16 +198,16 @@ export const useGameStore = create<GameState>(
         
         if (!isPlaying || isPaused) return;
         
-        // İlk zıplama kontrolü
+        // First jump check
         if (!isJumping) {
-          // İlk zıplama
+          // First jump
           set({ 
             isJumping: true, 
             canDoubleJump: true, 
             hasDoubleJumped: false
           });
           
-          // Yukarı zıplama
+          // Jump up
           const jumpUp = () => {
             const { playerPosition } = get();
             let currentHeight = 0;
@@ -225,7 +225,7 @@ export const useGameStore = create<GameState>(
             }, 20);
           };
           
-          // Aşağı inme
+          // Coming down
           const jumpDown = () => {
             const { playerPosition, hasDoubleJumped } = get();
             let currentHeight = JUMP_HEIGHT;
@@ -234,7 +234,7 @@ export const useGameStore = create<GameState>(
             const fallInterval = setInterval(() => {
               const currentState = get();
               
-              // Eğer çift zıplama yapıldıysa, inişi iptal et ve tekrar zıpla
+              // If double jump was performed, cancel descent and jump again
               if (currentState.hasDoubleJumped) {
                 clearInterval(fallInterval);
                 return;
@@ -259,14 +259,14 @@ export const useGameStore = create<GameState>(
           jumpUp();
         } 
         else if (canDoubleJump && !hasDoubleJumped) {
-          // Çift zıplama
+          // Double jump
           set({ hasDoubleJumped: true, canDoubleJump: false });
           
-          // İkinci zıplama için yeni yüksekliğe çık
+          // Second jump to new height
           const doubleJumpUp = () => {
             const { playerPosition } = get();
             let startHeight = playerPosition.y;
-            let targetHeight = startHeight + JUMP_HEIGHT / 1.5; // Daha kısa bir ikinci zıplama
+            let targetHeight = startHeight + JUMP_HEIGHT / 1.5; // Shorter second jump
             let currentHeight = startHeight;
             const jumpStep = 10;
             
@@ -282,7 +282,7 @@ export const useGameStore = create<GameState>(
             }, 20);
           };
           
-          // İkinci zıplamadan sonra aşağı inme
+          // Coming down after second jump
           const doubleJumpDown = (maxHeight: number) => {
             const { playerPosition } = get();
             let currentHeight = maxHeight;
@@ -316,7 +316,7 @@ export const useGameStore = create<GameState>(
       addObstacle: () => {
         const { obstacles, level, activePowerup } = get();
         
-        // Seviyeye göre engel özellikleri
+        // Obstacle properties based on level
         const minHeight = 30 + level * 5;
         const maxHeight = 70 + level * 5;
         const height = Math.floor(Math.random() * (maxHeight - minHeight) + minHeight);
@@ -324,10 +324,10 @@ export const useGameStore = create<GameState>(
         const width = 30;
         const speed = get().obstacleSpeed;
         
-        // Güçlendirme ekleme olasılığı - eğer aktif güçlendirme yoksa
+        // Powerup adding probability - only if no active powerup
         const shouldAddPowerup = !activePowerup && Math.random() < 0.3; // %30 olasılık
         
-        // Rastgele güçlendirme tipi seç
+        // Select random powerup type
         let powerupType = undefined;
         if (shouldAddPowerup) {
           const powerupTypes = ['invisibility', 'slowTime', 'gun', 'shrinkObstacles', 'doublePoints'];
@@ -338,7 +338,7 @@ export const useGameStore = create<GameState>(
         const newObstacle: Obstacle = {
           id: Date.now(),
           x: GAME_WIDTH,
-          y: 0, // Yerde olacak şekilde
+          y: 0, // Will be positioned on the ground
           width,
           height,
           speed,
@@ -371,43 +371,43 @@ export const useGameStore = create<GameState>(
         
         if (!isPlaying || isPaused) return;
         
-        // Mermi pozisyonunu güncelle (eğer silah güçlendirmesi aktifse)
+        // Update bullet position (if gun powerup is active)
         let updatedBulletPosition = bulletPosition;
         if (bulletPosition) {
-          // Mermi hareket hızı
+          // Bullet movement speed
           const BULLET_SPEED = 10;
           
-          // Mermiyi ileri hareket ettir
+          // Move bullet forward
           updatedBulletPosition = { ...bulletPosition, x: bulletPosition.x + BULLET_SPEED };
           
-          // Mermi ekranın dışına çıktıysa temizle
+          // Clear bullet if it goes off screen
           if (updatedBulletPosition.x > GAME_WIDTH) {
             updatedBulletPosition = null;
           }
           
-          // Mermi pozisyonunu güncelle
+          // Update bullet position
           set({ bulletPosition: updatedBulletPosition });
         }
         
-        // Engelleri hareket ettir
+        // Move obstacles
         const updatedObstacles = obstacles.map(obstacle => {
-          // Eğer engel yok edilmişse işlem yapma
+          // Don't process if obstacle is destroyed
           if (obstacle.destroyed) {
             return { ...obstacle, x: obstacle.x - obstacleSpeed };
           }
           
-          // Mermi ile engel çarpışma kontrolü
+          // Bullet collision with obstacle check
           if (bulletPosition && 
               bulletPosition.x < obstacle.x + obstacle.width &&
               bulletPosition.x + 10 > obstacle.x && // Mermi genişliği 10px varsayalım
               bulletPosition.y < obstacle.height &&
               bulletPosition.y + 5 > 0) { // Mermi yüksekliği 5px varsayalım
             
-            // Engel vuruldu, skoru artır ve mermiyi temizle
+            // Obstacle hit, increase score and clear bullet
             get().increaseScore();
             set({ bulletPosition: null });
             
-            // Engeli yok et (görünmez yap ama skor için hala geçilmiş sayılsın)
+            // Destroy obstacle (make invisible but still count as passed for score)
             return { 
               ...obstacle, 
               x: obstacle.x - obstacleSpeed, 
@@ -416,13 +416,13 @@ export const useGameStore = create<GameState>(
             };
           }
           
-          // Eğer engel geçildiyse ve daha önce sayılmadıysa skoru artır
+          // If obstacle is passed and not previously counted, increase score
           if (obstacle.x + obstacle.width < playerPosition.x && !obstacle.passed) {
             get().increaseScore();
             return { ...obstacle, x: obstacle.x - obstacleSpeed, passed: true };
           }
           
-          // Güçlendirme alma kontrolü - zıplama durumunda ve engelin üzerinde güçlendirme varsa
+          // Powerup collection check - when jumping and obstacle has powerup
           if (isJumping && 
               obstacle.hasPowerup && 
               !activePowerup &&
@@ -430,30 +430,30 @@ export const useGameStore = create<GameState>(
               playerPosition.x + PLAYER_WIDTH > obstacle.x && 
               playerPosition.y >= obstacle.height) {
           
-          // Güçlendirme toplandı
+          // Powerup collected
           if (obstacle.powerupType) {
           get().activatePowerup(obstacle.powerupType);
           }
           
-          // Güçlendirmeyi kaldır
+          // Remove powerup
             return { ...obstacle, x: obstacle.x - obstacleSpeed, hasPowerup: false, powerupType: undefined };
           }
           
           return { ...obstacle, x: obstacle.x - obstacleSpeed };
         });
         
-        // Ekrandan çıkan engelleri temizle
+        // Remove obstacles that have gone off screen
         const filteredObstacles = updatedObstacles.filter(obstacle => obstacle.x + obstacle.width > 0);
         
-        // Çarpışma kontrolü
+        // Collision detection
         const collision = filteredObstacles.some(obstacle => {
-          // Eğer engel yok edilmişse çarpışma yok
+          // If obstacle is destroyed, no collision
           if (obstacle.destroyed) return false;
           
-          // Eğer görünmezlik güçlendirmesi aktifse çarpışma yok
+          // If invisibility powerup is active, no collision
           if (activePowerup === 'invisibility') return false;
           
-          // Basit bir dikdörtgen çarpışma kontrolü
+          // Simple rectangle collision check
           return (
             playerPosition.x < obstacle.x + obstacle.width &&
             playerPosition.x + PLAYER_WIDTH > obstacle.x &&
@@ -472,8 +472,8 @@ export const useGameStore = create<GameState>(
       increaseScore: () => {
         const { score, level, totalScore, pointsMultiplier } = get();
         
-        // Puan çarpanına göre puan ekleme
-        const basePoints = 10; // Standart puan
+        // Add points based on multiplier
+        const basePoints = 10; // Standard points
         const pointsToAdd = basePoints * pointsMultiplier;
         
         const newScore = score + pointsToAdd;
@@ -481,12 +481,12 @@ export const useGameStore = create<GameState>(
         
         set({ score: newScore, totalScore: newTotalScore });
         
-        // Her 100 puanda bir seviye yükselt
+        // Increase level every 100 points
         if (Math.floor(newScore / 100) > Math.floor(score / 100)) {
           get().increaseLevel();
         }
         
-        // Yeni puana göre skinlerin kilidini aç
+        // Unlock skins based on new score
         get().checkAndUnlockSkins();
       },
       
@@ -502,7 +502,7 @@ export const useGameStore = create<GameState>(
       increaseLevel: () => {
         const { level, obstacleSpeed, obstacleFrequency } = get();
         
-        // Seviye arttıkça oyun zorlaşır
+        // Level increases as game gets harder
         const newLevel = level + 1;
         const newSpeed = obstacleSpeed + 1;
         const newFrequency = Math.max(500, obstacleFrequency - 100);
@@ -514,43 +514,43 @@ export const useGameStore = create<GameState>(
         });
       },
       
-      // Güçlendirmeyi aktif etme fonksiyonu
+      // Powerup activation function
       activatePowerup: (powerupType: 'invisibility' | 'slowTime' | 'gun' | 'shrinkObstacles' | 'doublePoints') => {
         const { powerupTimer, obstacleSpeed } = get();
         
-        // Eğer önceki bir zamanlayıcı varsa temizle
+        // Clear previous timer if exists
         if (powerupTimer) {
           clearTimeout(powerupTimer);
         }
         
-        // Güçlendirme tipine göre özel işlemler
+        // Special actions based on powerup type
         if (powerupType === 'slowTime') {
-          // Engel hızını yarıya düşür
+          // Reduce obstacle speed to half
           set({ 
             originalObstacleSpeed: obstacleSpeed,
             obstacleSpeed: obstacleSpeed / 2 
           });
         } else if (powerupType === 'shrinkObstacles') {
-          // Engelleri küçült - Bu işlem Obstacle bileşeninde yapılacak
+          // Shrink obstacles - This is handled in the Obstacle component
         } else if (powerupType === 'gun') {
-          // Silah güçlendirmesi için gerekli başlangıç ayarları
+          // Initial settings for gun powerup
           set({ bulletPosition: null });
         } else if (powerupType === 'doublePoints') {
-          // 2 katı puan güçlendirmesi
+          // 2x points powerup
           set({ pointsMultiplier: 2 });
         }
         
-        // Güçlendirmeyi aktif et
+        // Activate the powerup
         set({ activePowerup: powerupType });
         
-        // 10 saniye sonra güçlendirmeyi kapat
+        // Deactivate powerup after 10 seconds
         const timer = setTimeout(() => {
-          // Güçlendirme sonunda yapılacak temizlikler
+          // Cleanup actions when powerup ends
           if (powerupType === 'slowTime') {
-            // Engel hızını orijinal değerine geri döndür
+            // Restore obstacle speed to original value
             set({ obstacleSpeed: get().originalObstacleSpeed });
           } else if (powerupType === 'doublePoints') {
-            // Puan çarpanını geri döndür
+            // Restore points multiplier
             set({ pointsMultiplier: 1 });
           }
           
@@ -564,79 +564,79 @@ export const useGameStore = create<GameState>(
         set({ powerupTimer: timer as unknown as number });
       },
       
-      // Silah güçlendirmesi için ateş etme fonksiyonu
+      // Function for firing with gun powerup
       shootBullet: () => {
         const { activePowerup, playerPosition, bulletPosition } = get();
         
-        // Silah güçlendirmesi aktif değilse veya mevcut bir mermi varsa işlemi iptal et
+        // If gun powerup isn't active or a bullet already exists, cancel
         if (activePowerup !== 'gun' || bulletPosition) return;
         
-        // Oyuncunun pozisyonundan yeni bir mermi oluştur
+        // Create a new bullet from player's position
         set({
           bulletPosition: {
-            x: playerPosition.x + PLAYER_WIDTH, // Karakterin önünden ateş et
-            y: playerPosition.y + PLAYER_HEIGHT / 2 // Karakterin ortasından ateş et
+            x: playerPosition.x + PLAYER_WIDTH, // Fire from front of character
+            y: playerPosition.y + PLAYER_HEIGHT / 2 // Fire from middle of character
           }
         });
       },
       
-      // Karakter yeteneği aktivasyonu
+      // Character ability activation
       activateAbility: (abilityType) => {
         const { currentSkinId, activeAbility, abilityTimer, abilityLastUsed } = get();
         const currentSkin = getSkinById(currentSkinId);
         
-        // Karakterin yeteneği yoksa işlemi iptal et
+        // If character has no ability, cancel
         if (!currentSkin.ability || currentSkin.ability.type !== abilityType) {
           return;
         }
         
-        // Soğuma süresini kontrol et
+        // Check cooldown time
         const currentTime = Date.now();
         const cooldownTime = currentSkin.ability.cooldown || 10000; // Varsayılan 10 saniye
         
         if (currentTime - abilityLastUsed < cooldownTime) {
-          // Soğuma süresi dolmamışsa işlemi iptal et
+          // If cooldown hasn't completed, cancel
           const remainingCooldown = Math.ceil((cooldownTime - (currentTime - abilityLastUsed)) / 1000);
-          console.log(`Yetenek hala soğumada. ${remainingCooldown} saniye kaldı.`);
+          console.log(`Ability still cooling down. ${remainingCooldown} seconds left.`);
           return;
         }
 
-        // Eğer önceki bir zamanlayıcı varsa temizle
+        // If a previous timer exists, clear it
         if (abilityTimer) {
           clearTimeout(abilityTimer);
         }
         
-        // Yeteneklere özel işlemler
+        // Ability-specific actions
         switch (abilityType) {
           case 'shield':
-            // Koruyucu kalkan aktif et
+            // Activate protective shield
             set({ hasShield: true });
             break;
             
           case 'time_warp':
-            // Zamanı yavaşlat
+            // Slow down time
             const { obstacleSpeed } = get();
             set({ 
               originalObstacleSpeed: obstacleSpeed,
-              obstacleSpeed: obstacleSpeed / 3 // Üçte birine düşür
+              obstacleSpeed: obstacleSpeed / 3 // Reduce to one-third
             });
             break;
             
           case 'size_change':
-            // Karakteri küçült
+            // Shrink character
             set({ isSmall: true });
             break;
             
           case 'teleport':
-            // Karakteri ileri ışınla
+            // Teleport character forward
             const { playerPosition } = get();
             set({ 
               playerPosition: { 
                 ...playerPosition, 
-                x: playerPosition.x + 200 // 200 piksel ileri ışınlan
+                x: playerPosition.x + 200 // Teleport 200 pixels forward
               } 
             });
-            // Teleport için yeteneği hemen kapat, süre yok
+            // Teleport has no duration, close ability immediately
             set({ 
               activeAbility: null,
               abilityLastUsed: currentTime,
@@ -645,47 +645,47 @@ export const useGameStore = create<GameState>(
             return; // Yeteneğin süresi olmadığı için erken dön
             
           case 'dash':
-            // Hızlı koşma
+            // Quick dash forward
             const dashPosition = get().playerPosition;
             set({ 
               playerPosition: { 
                 ...dashPosition, 
-                x: dashPosition.x + 150 // 150 piksel ileri atla
+                x: dashPosition.x + 150 // Jump 150 pixels forward
               } 
             });
             break;
             
           case 'magnet':
-            // Güçlendirmeleri çek - bu mantik updateObstacles içinde işlenecek
+            // Magnet to pull powerups - this logic will be handled in updateObstacles
             break;
             
           case 'triple_jump':
-            // Üç kez zıplama yeteneği - bu zaten jump metodu içinde işleniyor
+            // Triple jump ability - already handled in jump method
             break;
         }
         
-        // Yeteneği aktif et
+        // Activate the ability
         set({ 
           activeAbility: abilityType,
           abilityLastUsed: currentTime
         });
         
-        // Yeteneğin süresi varsa zamanlayıcı kur
+        // If ability has a duration, set a timer
         if (currentSkin.ability.duration) {
           const timer = setTimeout(() => {
-            // Yetenek süresinin sonunda temizlik işlemleri
+            // Cleanup actions at the end of ability duration
             switch (abilityType) {
               case 'shield':
                 set({ hasShield: false });
                 break;
                 
               case 'time_warp':
-                // Engel hızını orijinal değerine geri döndür
+                // Restore obstacle speed to original value
                 set({ obstacleSpeed: get().originalObstacleSpeed });
                 break;
                 
               case 'size_change':
-                // Karakteri normal boyuta geri getir
+                // Restore character size to normal
                 set({ isSmall: false });
                 break;
             }
@@ -698,7 +698,7 @@ export const useGameStore = create<GameState>(
           
           set({ abilityTimer: timer as unknown as number });
         } else {
-          // Süresi olmayan yetenekler için (triple_jump gibi) direkt aktif et
+          // Set a timer for abilities with no duration (like triple_jump)
           set({ 
             activeAbility: abilityType,
             abilityTimer: null
@@ -706,7 +706,7 @@ export const useGameStore = create<GameState>(
         }
       },
       
-      // Aktif yeteneği kullan (oyun içi bir tuşa basıldığında)
+      // Use active ability (when pressed in-game)
       useAbility: () => {
         const { currentSkinId, isPlaying, activeAbility } = get();
         
@@ -714,38 +714,38 @@ export const useGameStore = create<GameState>(
         
         const currentSkin = getSkinById(currentSkinId);
         
-        // Karakterin yeteneği yoksa işlemi iptal et
+        // If character has no ability, cancel
         if (!currentSkin.ability) {
           return;
         }
         
-        // Eğer yetenek zaten aktifse, işlemi iptal et
+        // If ability is already active, cancel
         if (activeAbility) {
           return;
         }
         
-        // Yeteneği aktif et
+        // Activate the ability
         get().activateAbility(currentSkin.ability.type);
       },
       
-      // Karakter skin'ini değiştir
+      // Change character skin
       setSkin: (skinId) => {
         const { unlockedSkins } = get();
         
-        // Skin kilidi açılmış mı kontrol et
+        // Check if skin is unlocked
         if (unlockedSkins.includes(skinId)) {
           set({ currentSkinId: skinId });
-          return true;
+          return true; // Successfully unlocked
         }
         
-        return false; // Skin kilidi açılmamış
+        return false; // Skin is not unlocked
       },
       
-      // Belirli bir skin'in kilidini aç
+      // Unlock a specific skin
       unlockSkin: (skinId) => {
         const { unlockedSkins } = get();
         
-        // Zaten kilidi açılmış mı kontrol et
+        // Check if already unlocked
         if (unlockedSkins.includes(skinId)) {
           return false;
         }
@@ -754,7 +754,7 @@ export const useGameStore = create<GameState>(
         return true;
       },
       
-      // Toplam puana göre açılabilecek skinleri kontrol et ve aç
+      // Check and unlock skins based on total score
       checkAndUnlockSkins: () => {
         const { totalScore } = get();
         const unlockedSkins = getUnlockedSkins(totalScore).map(skin => skin.id);
@@ -762,7 +762,7 @@ export const useGameStore = create<GameState>(
       },
     }),
     {
-      name: 'engel-atlama-oyunu', // localStorage key
+      name: 'obstacle-jumping-game', // localStorage key
       partialize: (state) => ({
         highScore: state.highScore,
         unlockedSkins: state.unlockedSkins,

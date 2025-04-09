@@ -32,7 +32,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
         overflow: 'hidden'
       }}
     >
-      {/* Arkaplan Dekorasyonu */}
+      {/* Background Decoration */}
       <div
         style={{
           position: 'absolute',
@@ -80,7 +80,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
         }}
       />
       
-      {/* Oyun Başlığı */}
+      {/* Game Title */}
       <h1
         style={{
           fontSize: '46px', // Daha da büyütüldü
@@ -89,7 +89,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
           color: '#FF5722'
         }}
       >
-        Engel Atlama Oyunu
+        Obstacle Jumping Game
       </h1>
       
       <p
@@ -101,7 +101,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
           color: '#333'
         }}
       >
-        Engellerin üzerinden atlayarak puan topla! Ne kadar uzun süre hayatta kalabileceksin?
+        Jump over obstacles to collect points! How long can you survive?
       </p>
       
       {(isGameOver || storeGameOver) && (
@@ -116,7 +116,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
               letterSpacing: '1px'
             }}
           >
-            Oyun Bitti!
+            Game Over!
           </p>
 
           <div 
@@ -144,7 +144,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
                   letterSpacing: '0.5px'
                 }}
               >
-                Bu Oyundaki Puan
+                This Game's Score
               </p>
               <p
                 style={{
@@ -172,7 +172,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
                   letterSpacing: '0.5px'
                 }}
               >
-                Toplam Puan
+                Total Score
               </p>
               <p
                 style={{
@@ -200,7 +200,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
             color: '#2196F3'
           }}
         >
-          En Yüksek Skor: {highScore}
+          High Score: {highScore}
         </p>
       )}
 
@@ -212,7 +212,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
             color: '#FF5722'
           }}
         >
-          Toplam Puan: {totalScore}
+          Total Score: {totalScore}
         </p>
       )}
       
@@ -244,7 +244,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
           e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.3)';
         }}
       >
-        {isGameOver || storeGameOver ? 'Yeniden Başlat' : 'Oyunu Başlat'}
+        {isGameOver || storeGameOver ? 'Restart' : 'Start Game'}
       </button>
 
       <button
@@ -273,7 +273,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
           e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
         }}
       >
-        Karakter Seç ({unlockedSkins.length}/{SKINS.length})
+        Select Character ({unlockedSkins.length}/{SKINS.length})
       </button>
 
       {!isGameOver && !storeGameOver && (
@@ -287,7 +287,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
               fontSize: '14px',
               color: '#FFF'
             }}>SPACE</span>
-            <span style={{ fontSize: '14px', color: '#555' }}>Zıpla</span>
+            <span style={{ fontSize: '14px', color: '#555' }}>Jump</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{
@@ -298,12 +298,12 @@ const StartScreen: React.FC<StartScreenProps> = ({ isGameOver = false }) => {
               fontSize: '14px',
               color: '#FFF'
             }}>R</span>
-            <span style={{ fontSize: '14px', color: '#555' }}>Yeniden başlat</span>
+            <span style={{ fontSize: '14px', color: '#555' }}>Restart</span>
           </div>
         </div>
       )}
 
-      {/* Skin seçimi modal'i */}
+      {/* Skin selection modal */}
       {showSkinSelector && <SkinSelector onClose={() => setShowSkinSelector(false)} />}
     </div>
   );

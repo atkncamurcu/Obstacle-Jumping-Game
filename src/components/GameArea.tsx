@@ -16,7 +16,7 @@ const GameArea = () => {
     totalScore
   } = useGameStore();
   
-  // Oyun alanı boyutları
+  // Game area dimensions
   const GAME_WIDTH = 1000; // Maksimum genişlik
   const GAME_HEIGHT = 550; // Yükseklik
   
@@ -28,7 +28,7 @@ const GameArea = () => {
         width: '100%',
         maxWidth: `${GAME_WIDTH}px`,
         height: `${GAME_HEIGHT}px`,
-        backgroundColor: '#87CEEB', // Gökyüzü rengi
+        backgroundColor: '#87CEEB', // Sky color
         overflow: 'hidden',
         border: '2px solid #333',
         borderRadius: '8px',
@@ -36,7 +36,7 @@ const GameArea = () => {
         boxSizing: 'border-box'
       }}
     >
-      {/* Gökyüzü Efekti (bulutlar) */}
+      {/* Sky Effect (clouds) */}
       <div 
         className="clouds"
         style={{
@@ -63,7 +63,7 @@ const GameArea = () => {
         }}
       />
       
-      {/* Oyun Başlığı (sadece start screen olmadığında göster) */}
+      {/* Game Title (only show when not in start screen) */}
       {!isPlaying && !isGameOver && (
         <div
           style={{
@@ -79,11 +79,11 @@ const GameArea = () => {
             textShadow: '2px 2px 5px rgba(0, 0, 0, 0.7)'
           }}
         >
-          Engel Atlama Oyunu
+          Obstacle Jumping Game
         </div>
       )}
       
-      {/* Zemin */}
+      {/* Ground */}
       <div 
         className="ground"
         style={{
@@ -91,15 +91,15 @@ const GameArea = () => {
           bottom: '0',
           width: '100%',
           height: '50px',
-          backgroundColor: '#8B4513', // Kahverengi zemin
-          borderTop: '5px solid #556B2F' // Yeşil çim
+          backgroundColor: '#8B4513', // Brown ground
+          borderTop: '5px solid #556B2F' // Green grass
         }}
       />
       
-      {/* Oyuncu */}
+      {/* Player */}
       <Player />
       
-      {/* Engeller */}
+      {/* Obstacles */}
       {obstacles.map(obstacle => (
         <Obstacle 
           key={obstacle.id} 
@@ -107,7 +107,7 @@ const GameArea = () => {
         />
       ))}
       
-      {/* Mermiler (Silah güçlendirmesi için) */}
+      {/* Bullets (for gun powerup) */}
       {bulletPosition && (
         <div
           style={{
@@ -124,7 +124,7 @@ const GameArea = () => {
         />
       )}
       
-      {/* Game Over ekranı */}
+      {/* Game Over screen */}
       {isGameOver && (
         <div
         className="game-over"
@@ -144,13 +144,13 @@ const GameArea = () => {
         }}
         >
         <h2 style={{fontSize: '24px', margin: '0 0 10px', color: '#FF5722'}}>Game Over!</h2>
-        <p style={{margin: '0 0 5px', fontSize: '14px'}}>Seviye: {level}</p>
+        <p style={{margin: '0 0 5px', fontSize: '14px'}}>Level: {level}</p>
         <div style={{height: '2px', background: 'linear-gradient(to right, transparent, #FFC107, transparent)', margin: '10px 0'}}></div>
-        <p style={{margin: '0 0 5px', fontSize: '20px', fontWeight: 'bold', color: '#FFC107'}}>Bu Oyundaki Puan: {score}</p>
+        <p style={{margin: '0 0 5px', fontSize: '20px', fontWeight: 'bold', color: '#FFC107'}}>Score This Game: {score}</p>
         <div style={{height: '2px', background: 'linear-gradient(to right, transparent, #4CAF50, transparent)', margin: '10px 0'}}></div>
-        <p style={{margin: '0 0 10px', fontSize: '16px', color: '#4CAF50'}}>Toplam Puan: {totalScore}</p>
+        <p style={{margin: '0 0 10px', fontSize: '16px', color: '#4CAF50'}}>Total Score: {totalScore}</p>
 
-        {/* Açılan yeni skin'ler */}
+        {/* Newly unlocked skins */}
         {getUnlockedSkins(totalScore).length > getUnlockedSkins(totalScore - score).length && (
           <div style={{ 
             backgroundColor: 'rgba(255, 255, 255, 0.1)', 
@@ -158,7 +158,7 @@ const GameArea = () => {
             padding: '10px',
             marginBottom: '15px'
           }}>
-            <p style={{margin: '0 0 5px', fontSize: '14px', color: '#3498db'}}>Tebrikler! Yeni karakter(ler) açtın:</p>
+            <p style={{margin: '0 0 5px', fontSize: '14px', color: '#3498db'}}>Congratulations! You've unlocked new character(s):</p>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '10px' }}>
               {getUnlockedSkins(totalScore)
                 .filter(skin => getUnlockedSkins(totalScore - score).findIndex(s => s.id === skin.id) === -1)
@@ -188,13 +188,13 @@ const GameArea = () => {
 
         <div style={{marginTop: '15px', padding: '10px', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: '5px'}}>
           <p style={{margin: '0', fontSize: '14px'}}>
-            Yeniden başlamak için <span style={{backgroundColor: '#333', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold'}}>“R”</span> tuşuna basın.
+            Press <span style={{backgroundColor: '#333', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold'}}>“R”</span> key to restart.
           </p>
         </div>
         </div>
       )}
       
-      {/* Seviye göstergesi */}
+      {/* Level indicator */}
       <div
         className="level-indicator"
         style={{
@@ -208,10 +208,10 @@ const GameArea = () => {
           fontSize: '14px'
         }}
       >
-        Seviye: {level}
+        Level: {level}
       </div>
       
-      {/* Aktif güçlendirme göstergesi */}
+      {/* Active powerup indicator */}
       {activePowerup && (
         <div
           className="active-powerup"
@@ -240,31 +240,31 @@ const GameArea = () => {
           {activePowerup === 'doublePoints' && (
             <>
               <span style={{ fontSize: '16px' }}>💰</span>
-              <span>2x Puan!</span>
+              <span>2x Points!</span>
             </>
           )}
           {activePowerup === 'invisibility' && (
             <>
               <span style={{ fontSize: '16px' }}>👻</span>
-              <span>Görünmezlik!</span>
+              <span>Invisibility!</span>
             </>
           )}
           {activePowerup === 'slowTime' && (
             <>
               <span style={{ fontSize: '16px' }}>⏰</span>
-              <span>Yavaş Zaman!</span>
+              <span>Slow Time!</span>
             </>
           )}
           {activePowerup === 'gun' && (
             <>
               <span style={{ fontSize: '16px' }}>🔫</span>
-              <span>Silah! (X tuşuna bas)</span>
+              <span>Gun! (Press X key)</span>
             </>
           )}
           {activePowerup === 'shrinkObstacles' && (
             <>
               <span style={{ fontSize: '16px' }}>🔍</span>
-              <span>Küçük Engeller!</span>
+              <span>Small Obstacles!</span>
             </>
           )}
         </div>

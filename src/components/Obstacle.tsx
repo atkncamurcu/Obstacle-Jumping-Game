@@ -6,37 +6,37 @@ interface ObstacleProps {
   obstacle: ObstacleType;
 }
 
-// Powerup tipine göre renk döndüren yardımcı fonksiyon
+// Helper function that returns color based on powerup type
 const getPowerupColor = (powerupType: string, alpha: number = 1): string => {
   switch (powerupType) {
     case 'invisibility':
-      return `rgba(0, 191, 255, ${alpha})`; // Mavi
+      return `rgba(0, 191, 255, ${alpha})`; // Blue
     case 'slowTime':
-      return `rgba(155, 89, 182, ${alpha})`; // Mor
+      return `rgba(155, 89, 182, ${alpha})`; // Purple
     case 'gun':
-      return `rgba(231, 76, 60, ${alpha})`; // Kırmızı
+      return `rgba(231, 76, 60, ${alpha})`; // Red
     case 'shrinkObstacles':
-      return `rgba(46, 204, 113, ${alpha})`; // Yeşil
+      return `rgba(46, 204, 113, ${alpha})`; // Green
     case 'doublePoints':
-      return `rgba(255, 193, 7, ${alpha})`; // Sarı
+      return `rgba(255, 193, 7, ${alpha})`; // Yellow
     default:
-      return `rgba(255, 193, 7, ${alpha})`; // Sarı
+      return `rgba(255, 193, 7, ${alpha})`; // Yellow
   }
 };
 
-// Powerup tipine göre simge döndüren yardımcı fonksiyon
+// Helper function that returns icon based on powerup type
 const getPowerupIcon = (powerupType: string): string => {
   switch (powerupType) {
     case 'invisibility':
-      return '👻'; // Hayalet
+      return '👻'; // Ghost
     case 'slowTime':
-      return '⏱️'; // Saat
+      return '⏱️'; // Clock
     case 'gun':
-      return '🔫'; // Silah
+      return '🔫'; // Gun
     case 'shrinkObstacles':
-      return '🔍'; // Küçültme
+      return '🔍'; // Magnifier (shrink)
     case 'doublePoints':
-      return '💰'; // Para çantası (iki kat puan)
+      return '💰'; // Money bag (double points)
     default:
       return '?';
   }
@@ -46,7 +46,7 @@ const Obstacle: React.FC<ObstacleProps> = ({ obstacle }) => {
   const { x, width, height, hasPowerup, powerupType, destroyed } = obstacle;
   const { activePowerup } = useGameStore();
   
-  // Zemin yüksekliği
+  // Ground height
   const GROUND_HEIGHT = 50;
   
   return (
@@ -56,31 +56,31 @@ const Obstacle: React.FC<ObstacleProps> = ({ obstacle }) => {
         position: 'absolute',
         left: `${x}px`,
         bottom: `${GROUND_HEIGHT}px`,
-        // Engel küçültme güçlendirmesi aktifse boyutları küçült
+        // Reduce size if shrink obstacles powerup is active
         width: activePowerup === 'shrinkObstacles' ? `${width * 0.6}px` : `${width}px`,
         height: activePowerup === 'shrinkObstacles' ? `${height * 0.6}px` : `${height}px`,
-        backgroundColor: destroyed ? 'transparent' : '#4CAF50', // Yok edilmişse görünmez yap
+        backgroundColor: destroyed ? 'transparent' : '#4CAF50', // Make invisible if destroyed
         borderRadius: '5px 5px 0 0',
         boxShadow: destroyed ? 'none' : '2px 2px 5px rgba(0, 0, 0, 0.3)',
         opacity: destroyed ? 0 : 1,
-        transition: 'width 0.3s, height 0.3s' // Küçültme için geçiş animasyonu
+        transition: 'width 0.3s, height 0.3s' // Transition animation for shrinking
       }}
     >
       {!destroyed && (
         <>
-          {/* Engel detayları */}
+          {/* Obstacle details */}
           <div
             style={{
               position: 'absolute',
               top: '0',
               width: '100%',
               height: '10px',
-              backgroundColor: '#388E3C', // Koyu yeşil üst kısım
+              backgroundColor: '#388E3C', // Dark green top part
               borderRadius: '5px 5px 0 0'
             }}
           />
           
-          {/* Çizgiler */}
+          {/* Lines */}
           {[...Array(3)].map((_, index) => (
             <div
               key={index}
@@ -98,26 +98,26 @@ const Obstacle: React.FC<ObstacleProps> = ({ obstacle }) => {
         </>
       )}
       
-      {/* Güçlendirme (Powerup) gösterimi */}
+      {/* Powerup display */}
       {hasPowerup && powerupType && (
         <div
           style={{
             position: 'absolute',
-            top: '-20px', // Engelin üzerinde gösterme
+            top: '-20px', // Show above the obstacle
             left: '50%',
             transform: 'translateX(-50%)',
             width: '25px',
             height: '25px',
-            backgroundColor: getPowerupColor(powerupType), // Powerup tipine göre renk
+            backgroundColor: getPowerupColor(powerupType), // Color based on powerup type
             borderRadius: '50%',
-            boxShadow: `0 0 10px ${getPowerupColor(powerupType, 0.8)}`, // Parlayan efekt
+            boxShadow: `0 0 10px ${getPowerupColor(powerupType, 0.8)}`, // Glowing effect
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             fontSize: '14px',
             fontWeight: 'bold',
             color: '#FFF',
-            animation: 'float 1s infinite alternate', // Hafif hareket animasyonu
+            animation: 'float 1s infinite alternate', // Light movement animation
           }}
         >
           {getPowerupIcon(powerupType)}
