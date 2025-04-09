@@ -1,64 +1,69 @@
-# Engel Atlama Oyunu
+# Obstacle Jumping Game
 
-Modern React ve TypeScript kullanılarak geliştirilen 2D platform oyunu. Karakteri yatay düzlemde hareket ettirerek engellerin üzerinden atlayın ve puan toplayın!
+A 2D platform game developed using modern React and TypeScript. Move the character on a horizontal plane, jump over obstacles, and collect points!
 
-## Özellikler
+## Features
 
-- SPACE tuşu ile zıplama
-- Sabit karakterle engelleri aşma
-- Engellere çarpmadan ilerleme
-- Puan ve yüksek skor sistemi
-- Zorluk seviyesi zamanla artar
-- Duyarlı tasarım (mobil cihazlar için dokunmatik kontroller)
-- Ses efektleri ve müzik
+- Jump with the SPACE key
+- Double jump capability
+- Various powerups to collect:
+  - Invisibility (pass through obstacles)
+  - Slow Time (reduces obstacle speed)
+  - Gun (shoot obstacles for points)
+  - Small Obstacles (reduces obstacle size)
+  - Double Points (score multiplier)
+- Character customization with unlockable skins
+- Score and high score system
+- Difficulty increases over time
 
-## Kurulum ve Çalıştırma
+## Installation and Running
 
-### Gereksinimler
+### Requirements
 
-- Node.js (v14 veya üzeri)
-- npm veya yarn
+- Node.js (v14 or higher)
+- npm or yarn
 
-### Kurulum Adımları
+### Installation Steps
 
-1. Bağımlılıkları yükleyin:
+1. Install dependencies:
 ```bash
 npm install
-# veya
+# or
 yarn install
 ```
 
-2. Geliştirme sunucusunu başlatın:
+2. Start the development server:
 ```bash
 npm run dev
-# veya
+# or
 yarn dev
 ```
 
-3. Tarayıcınızda `http://localhost:5173` adresine gidin
+## Controls
 
-## Kontroller
+- `SPACE` or `↑`: Jump (press twice for double jump)
+- `X` or `F`: Shoot (when gun powerup is active)
+- `P`: Pause/resume game
+- `R`: Restart game
 
-- `SPACE` veya `↑`: Zıplama
-- `P`: Oyunu duraklatma/devam ettirme
-- `Y`: Oyunu yeniden başlatma
+## How to Play
 
-## Nasıl Oynanır
+1. Click the "Start Game" button or press R
+2. Jump over obstacles using the SPACE key
+3. Collect powerups to gain advantages
+4. Earn 10 points for each obstacle passed
+5. Unlock new character skins by increasing your total score
+6. The game gets harder as your level increases
 
-1. "Oyunu Başlat" butonuna tıklayın veya SPACE tuşuna basın
-2. SPACE tuşuyla zıplayın ve engellerin üzerinden geçin
-3. Her geçilen engel için 10 puan kazanın
-4. Seviye yükseldikçe oyun zorlaşır
-
-## Kullanılan Teknolojiler
+## Technologies Used
 
 - React
 - TypeScript
-- Zustand (State Yönetimi)
-- use-sound (Ses Efektleri)
-- CSS Animasyonları
-- localStorage (Yüksek Skor Kaydetme)
+- Zustand (State Management)
+- use-sound (Sound Effects)
+- CSS Animations
+- localStorage (Saving High Score and Unlocked Skins)
 
-## Lisans
+## License
 
-Bu proje MIT Lisansı altında lisanslanmıştır.
+This project is licensed under the MIT License.
